@@ -6,9 +6,9 @@ let newImages = [];
 const ADMIN_PASSWORD = 'metarchive2026'; // Change this to your secure password
 
 // GitHub Configuration - UPDATE THESE AFTER CREATING REPO
-const GITHUB_USERNAME = 'YOUR_GITHUB_USERNAME';  // e.g., 'adairjones'
-const GITHUB_REPO = 'met-archive';  // Your repo name
-const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN';  // Generate at: github.com/settings/tokens
+const GITHUB_USERNAME = 'jonesadair';  // e.g., 'adairjones'
+const GITHUB_REPO = 'noimageavailable';  // Your repo name
+const GITHUB_TOKEN = 'ghp_tbCQixfmDAYpE9s615QJFLpMHsiEKe1hopjS';  // Generate at: github.com/settings/tokens
 
 // Check if already logged in
 window.addEventListener('DOMContentLoaded', function() {
