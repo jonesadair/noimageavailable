@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Browse unpictured ancient objects (≤500 CE) from the Metropolitan Museum of Art collection. Includes objects on view in galleries available for photography.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2c3e50">
+    <title>Met Museum Unpictured Ancient Objects Archive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <pre class="ascii-bubble">
+ _____ _____ _____   _____ _____ _____ _____ _____ _____ _____ 
+|     |   __|_   _| |  _  | __  |     |  |  |     |  |  |   __|
+| | | |   __| | |   |     |    -|   --|     |-   -|  |  |   __|
+|_|_|_|_____| |_|   |__|__|__|__|_____|__|__|_____|\___/|_____|
+            </pre>
+            <p class="project-description">This project documents antiquities in the Metropolitan Museum of Art's collection that have no publicly available images in the Met's online database. Using the Met Collection API, it identifies and records these unpictured objects as a distinct subset of the collection, preserving their existing metadata, departmental context, chronology, and bibliographic references where present. The project operates as a parallel archive focused on digital absence within the Met's collection and supports the incremental addition of new visual documentation without altering the museum's original records.</p>
+        </div>
+    </header>
+
+    <nav class="controls">
+        <div class="container">
+            <div class="search-row">
+                <input type="text" id="searchInput" placeholder="search...">
+            </div>
+            
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label for="departmentFilter">department:</label>
+                    <select id="departmentFilter">
+                        <option value="">all departments</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="dateRange">date range:</label>
+                    <select id="dateRange">
+                        <option value="">all dates</option>
+                        <option value="prehistoric">prehistoric (before -3000)</option>
+                        <option value="bronze">bronze age (-3000 to -1200)</option>
+                        <option value="iron">iron age (-1200 to -500)</option>
+                        <option value="classical">classical (-500 to 0)</option>
+                        <option value="early">early ce (0 to 500)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="galleryStatus">location:</label>
+                    <select id="galleryStatus">
+                        <option value="">all locations</option>
+                        <option value="on-view">on view</option>
+                        <option value="in-storage">in storage</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="referenceStatus">references:</label>
+                    <select id="referenceStatus">
+                        <option value="">all objects</option>
+                        <option value="has-references">has references</option>
+                        <option value="no-references">no references</option>
+                        <option value="photographable">photographable</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="descriptionStatus">description:</label>
+                    <select id="descriptionStatus">
+                        <option value="">all objects</option>
+                        <option value="has-description">has description</option>
+                        <option value="no-description">no description</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortBy">sort by:</label>
+                    <select id="sortBy">
+                        <option value="accession">accession number</option>
+                        <option value="date">date (oldest first)</option>
+                        <option value="date-recent">date (newest first)</option>
+                        <option value="culture">culture</option>
+                        <option value="department">department</option>
+                        <option value="gallery">gallery number</option>
+                    </select>
+                </div>
+
+                <button id="resetFilters" class="btn-reset">reset filters</button>
+            </div>
+
+            <div class="stats">
+                <span id="resultCount">loading objects...</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="noData" class="no-data" style="display: none;">
+            <h2>No Data Loaded</h2>
+            <p>Please load the scraped data file (all_unpictured_ancient_objects.json) to view the archive.</p>
+            <input type="file" id="fileInput" accept=".json">
+        </div>
+
+        <div id="objectGrid" class="object-grid">
+            <!-- Objects will be dynamically inserted here -->
+        </div>
+
+        <div id="loadMore" class="load-more" style="display: none;">
+            <button id="loadMoreBtn" class="btn-primary">Load More Objects</button>
+        </div>
+    </main>
+
+    <!-- Progress Bar - Fixed at Bottom -->
+    <div id="progressBar" class="progress-bar-container">
+        <div class="progress-bar-label">
+            <span id="progressLabel">DOCUMENTATION PROGRESS</span>
+            <span id="progressStats">0 / 0 OBJECTS DOCUMENTED (0%)</span>
+            <span class="timestamp">Last edited: <span id="lastEditTime">Never</span></span>
+        </div>
+        <div class="progress-bar-track">
+            <div id="progressBarFill" class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Object Detail Modal -->
+    <div id="objectModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody">
+                <!-- Object details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Data sourced from <a href="https://metmuseum.github.io/" target="_blank">The Metropolitan Museum of Art Collection API</a></p>
+            <p class="small">The Metropolitan Museum of Art provides open access to information about the artworks, artists, and other items in its collection through their Collection API. Learn more at <a href="https://metmuseum.github.io/" target="_blank">metmuseum.github.io</a></p>
+            <p class="small">Objects dating ≤500 CE without digital images</p>
+            <p class="small credits-inline">created by <a href="https://instagram.com/adair_jones_" target="_blank" rel="noopener noreferrer">adair jones</a> for art historical purposes</p>
+        </div>
+    </footer>
+
+    <script src="cache.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

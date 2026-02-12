@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Met Archive - Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: #042818;
+            border: 2px solid #1a6010;
+        }
+
+        .login-form h2 {
+            color: #23ff12;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background: #052c22;
+            border: 1px solid #1a6010;
+            color: #ccdacc;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000;
+            border: 2px solid #23ff12;
+            color: #23ff12;
+            cursor: pointer;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .login-form button:hover {
+            background: #23ff12;
+            color: #000;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #1a6010;
+        }
+
+        .admin-search {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .admin-search input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #052c22;
+            border: 1px solid #1a6010;
+            color: #ccdacc;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .object-list {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .object-item {
+            background: #042818;
+            border: 1px solid #1a6010;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .object-item:hover {
+            border-color: #23ff12;
+            background: #052c22;
+        }
+
+        .object-item.selected {
+            border: 2px solid #23ff12;
+            background: #052c22;
+        }
+
+        .editor-panel {
+            background: #042818;
+            border: 2px solid #1a6010;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .editor-panel h3 {
+            color: #23ff12;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ccdacc;
+            margin-bottom: 0.5rem;
+            font-size: 12px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 0.5rem;
+            background: #052c22;
+            border: 1px solid #1a6010;
+            color: #ccdacc;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #052c22;
+            border: 1px solid #1a6010;
+            color: #ccdacc;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .image-preview-item {
+            position: relative;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border: 1px solid #1a6010;
+        }
+
+        .image-preview-item button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .btn-save {
+            background: #000;
+            border: 2px solid #23ff12;
+            color: #23ff12;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .btn-save:hover {
+            background: #23ff12;
+            color: #000;
+        }
+
+        .btn-logout {
+            background: #000;
+            border: 1px solid #DEFFAB;
+            color: #DEFFAB;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+        }
+
+        .success-message {
+            background: #000;
+            border: 2px solid #23ff12;
+            color: #23ff12;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            background: #000;
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-form">
+        <h2>MET ARCHIVE ADMIN</h2>
+        <input type="password" id="passwordInput" placeholder="Enter admin password">
+        <button onclick="login()">LOGIN</button>
+        <p style="color: #ccdacc; font-size: 11px; margin-top: 1rem;">Default password: metarchive2026</p>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" style="display: none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <div class="admin-search">
+                    <input type="text" id="adminSearch" placeholder="Search objects by accession number, title, or ID..." oninput="searchObjects()">
+                </div>
+                <button class="btn-logout" onclick="logout()">LOGOUT</button>
+            </div>
+
+            <div id="messageArea"></div>
+
+            <div class="object-list" id="objectList">
+                <!-- Objects will be listed here -->
+            </div>
+
+            <div id="editorPanel" class="editor-panel" style="display: none;">
+                <h3>EDIT OBJECT: <span id="currentObjectTitle"></span></h3>
+                
+                <div class="form-group">
+                    <label>Accession Number: <span id="currentAccession"></span></label>
+                    <label>Object ID: <span id="currentObjectID"></span></label>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Images:</label>
+                    <input type="file" id="imageInput" multiple accept="image/*" onchange="previewImages()">
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Documentation:</label>
+                    <textarea id="notesInput" placeholder="Add observations, sources, or documentation notes..."></textarea>
+                </div>
+
+                <button class="btn-save" onclick="saveChanges()">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
